@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, Component, Node, Vec3, Animation, tween, easing } from 'cc';
+import { _decorator, CCFloat, Component, Node, Vec3, Animation, tween, easing, RigidBody2D, v2 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bird')
@@ -18,16 +18,30 @@ export class Bird extends Component {
     public birdAnimation: Animation;
     public birdLocation: Vec3;
 
+    public hitSomething: boolean;
+
     onLoad() {
         this.resetBird();
-
         this.birdAnimation = this.getComponent(Animation);
     }
 
     resetBird() {
         this.birdLocation = new Vec3(0, 0, 0);
-
         this.node.setPosition(this.birdLocation);
+        // 重置旋转
+        this.node.angle = 0;
+
+        // 如果使用了物理引擎
+        const rigidBody = this.node.getComponent(RigidBody2D);
+        if (rigidBody) {
+            // 重置速度
+            rigidBody.linearVelocity = v2(0, 0);
+            rigidBody.angularVelocity = 0;
+            
+            // 如果有其他需要重置的物理属性，比如摩擦力、弹性等，也可以在这里设置
+        }
+        // 让小鸟不要旋转
+        this.hitSomething = false;
     }
     
     fly() {
