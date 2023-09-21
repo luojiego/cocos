@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, director, EventKeyboard, Input, input, KeyCode, Node, Contact2DType, Collider2D, IPhysics2DContact, log } from 'cc';
+import { _decorator, CCInteger, Component, director, Node, Contact2DType, Collider2D, IPhysics2DContact, log} from 'cc';
 import { Ground } from './Ground';
 import { Result } from './Result';
 import { Bird } from './Bird';
@@ -66,6 +66,7 @@ export class GameCtrl extends Component {
         this.initListener();
         this.result.resetScore();
         director.pause();
+        // game.pause();
         this.isOver = true;
     }
 
@@ -76,7 +77,7 @@ export class GameCtrl extends Component {
             let currentTime = Date.now();
 
             // 如果两次点击的时间差小于300毫秒，则不处理
-            if (currentTime - this.lastClickTime < 300) {
+            if (currentTime - this.lastClickTime < 200) {
                 // 可以在这里阻止事件的进一步传播，如果需要的话
                 log("时间小于 300ms");
                 event.stopPropagation();
@@ -88,7 +89,7 @@ export class GameCtrl extends Component {
             this.lastClickTime = currentTime;
 
             if (this.isOver == true) {
-                this.bird.resetBird();
+                this.resetBird();
                 this.resetGame();
             } else {
                 this.bird.fly();
@@ -96,28 +97,15 @@ export class GameCtrl extends Component {
             }
         })
     }
-    
-    /*
-    onKeyDown(event: EventKeyboard) {
-        switch (event.keyCode) {
-            case KeyCode.KEY_A:
-                this.gameOver();
-                break;
-            case KeyCode.KEY_P:
-                this.result.addScore();
-                break;
-            case KeyCode.KEY_Q:
-                this.resetGame();
-                this.bird.resetBird();
-                break;
-        }
-    }*/
 
     gameOver() {
         log("game over")
         this.result.showResult();
         this.isOver = true;
+
         director.pause();
+        // game.pause();
+
     }
 
     resetGame() {
@@ -127,9 +115,14 @@ export class GameCtrl extends Component {
         this.isOver = false;
     }
 
+    resetBird() {
+        this.bird.resetBird();
+    }
+
     startGame() {
         this.result.hideResult();
         director.resume();
+        // game.resume();
     }
 
     passPipe() {

@@ -40,7 +40,6 @@ export class Bird extends Component {
             
             // 如果有其他需要重置的物理属性，比如摩擦力、弹性等，也可以在这里设置
         }
-        // 让小鸟不要旋转
         this.hitSomething = false;
     }
     
